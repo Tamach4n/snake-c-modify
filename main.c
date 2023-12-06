@@ -48,6 +48,7 @@ int main() {
     int gameover = 0;
     int xdir = 1, ydir = 0;
     int applex = -1, appley;
+    int Applex = -1, Appley;
 
     while (!quit && !gameover) {
       if (applex < 0) {
@@ -65,6 +66,23 @@ int main() {
           printf("\e[%iF", appley + 1);
         }
       }
+      
+    while (!quit && !gameover) {
+      if (Applex < 0) {
+        // Create new apple
+        Applex = rand() % COLS;
+        Appley = rand() % ROWS;
+
+        for (int i = tail; i != head; i = (i + 1) % 1000)
+          if (x[i] == Applex && y[i] == Appley)
+            Applex = -1;
+
+        if (Applex >= 0) {
+          // Draw apple
+          printf("\e[%iB\e[%iC♡", Appley + 1, Applex + 1);
+          printf("\e[%iF", Appley + 1);
+        }
+      }
 
       // Clear snake tail
       printf("\e[%iB\e[%iC·", y[tail] + 1, x[tail] + 1);
@@ -72,6 +90,12 @@ int main() {
 
       if (x[head] == applex && y[head] == appley) {
         applex = -1;
+        printf("\a"); // Bell
+      } else
+        tail = (tail + 1) % 1000;
+
+      if (x[head] == Applex && y[head] == Appley) {
+        Applex = -1;
         printf("\a"); // Bell
       } else
         tail = (tail + 1) % 1000;
