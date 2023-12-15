@@ -20,6 +20,7 @@ int main() {
 
   int x[1000], y[1000];
   int quit = 0;
+  
   while (!quit) {
     // Render table
     printf("┌");
@@ -49,16 +50,19 @@ int main() {
     int xdir = 1, ydir = 0;
     int applex = -1, appley;
     int Applex = -1, Appley;
+    int Score = 0;
 
     while (!quit && !gameover) {
-      if (applex < 0) {
+      if (applex < 0) {   //  apple 
         // Create new apple
         applex = rand() % COLS;
         appley = rand() % ROWS;
 
-        for (int i = tail; i != head; i = (i + 1) % 1000)
-          if (x[i] == applex && y[i] == appley)
+        for (int i = tail; i != head; i = (i + 1) % 1000) {
+          if (x[i] == applex && y[i] == appley) {
             applex = -1;
+          }
+        } 
 
         if (applex >= 0) {
           // Draw apple
@@ -66,16 +70,17 @@ int main() {
           printf("\e[%iF", appley + 1);
         }
       }
-      
-    while (!quit && !gameover) {
-      if (Applex < 0) {
+          
+      if (Applex < 0) {   //  Apple
         // Create new apple
         Applex = rand() % COLS;
         Appley = rand() % ROWS;
 
-        for (int i = tail; i != head; i = (i + 1) % 1000)
-          if (x[i] == Applex && y[i] == Appley)
+        for (int i = tail; i != head; i = (i + 1) % 1000) {
+          if (x[i] == Applex && y[i] == Appley) {
             Applex = -1;
+          }
+        }
 
         if (Applex >= 0) {
           // Draw apple
@@ -91,6 +96,7 @@ int main() {
       if (x[head] == applex && y[head] == appley) {
         applex = -1;
         printf("\a"); // Bell
+        Score++;
       } else
         tail = (tail + 1) % 1000;
 
@@ -123,16 +129,16 @@ int main() {
         int ch = getchar();
         if (ch == 27 || ch == 'q') {
           quit = 1;
-        } else if (ch == 'h' && xdir != 1) {
+        } else if (ch == 'a' && xdir != 1) {
           xdir = -1;
           ydir = 0;
-        } else if (ch == 'l' && xdir != -1) {
+        } else if (ch == 'd' && xdir != -1) {
           xdir = 1;
           ydir = 0;
-        } else if (ch == 'j' && ydir != -1) {
+        } else if (ch == 's' && ydir != -1) {
           xdir = 0;
           ydir = 1;
-        } else if (ch == 'k' && ydir != 1) {
+        } else if (ch == 'w' && ydir != 1) {
           xdir = 0;
           ydir = -1;
         }
@@ -143,8 +149,10 @@ int main() {
       // Show game over
       printf("\e[%iB\e[%iC Game Over! ", ROWS / 2, COLS / 2 - 5);
       printf("\e[%iF", ROWS / 2);
+      printf("\e[%iB\e[%iC Score: %d", ROWS / 2 + 1, COLS / 2 - 5, Score);
       fflush(stdout);
       getchar();
+      printf("\n");
     }
   }
 
@@ -153,6 +161,5 @@ int main() {
 
   tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
   return 0;
+  
 }
-}
-
