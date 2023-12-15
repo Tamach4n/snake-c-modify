@@ -94,12 +94,6 @@ int main() {
       } else
         tail = (tail + 1) % 1000;
 
-      if (x[head] == Applex && y[head] == Appley) {
-        Applex = -1;
-        printf("\a"); // Bell
-      } else
-        tail = (tail + 1) % 1000;
-
       int newhead = (head + 1) % 1000;
       x[newhead] = (x[head] + xdir + COLS) % COLS;
       y[newhead] = (y[head] + ydir + ROWS) % ROWS;
